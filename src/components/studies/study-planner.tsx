@@ -10,6 +10,7 @@ import {
   NotebookPen,
   Plus,
   Target,
+  Trash2,
 } from "lucide-react";
 import { useForm, useWatch } from "react-hook-form";
 import { priorityMap } from "@/lib/data";
@@ -51,7 +52,9 @@ export function StudyPlanner() {
   const sessions = useSecretStore((state) => state.studySessions);
   const notes = useSecretStore((state) => state.studyNotes);
   const addStudySubject = useSecretStore((state) => state.addStudySubject);
+  const deleteStudySubject = useSecretStore((state) => state.deleteStudySubject);
   const addStudySession = useSecretStore((state) => state.addStudySession);
+  const deleteStudySession = useSecretStore((state) => state.deleteStudySession);
   const addStudyNote = useSecretStore((state) => state.addStudyNote);
   const toggleStudySession = useSecretStore((state) => state.toggleStudySession);
 
@@ -365,9 +368,19 @@ export function StudyPlanner() {
                           </p>
                         </div>
                       </div>
-                      <Badge tone={priorityTone[subject.priority]}>
-                        {priorityMap[subject.priority].label}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge tone={priorityTone[subject.priority]}>
+                          {priorityMap[subject.priority].label}
+                        </Badge>
+                        <button
+                          aria-label="Remover materia"
+                          className="flex size-8 items-center justify-center rounded-[var(--radius-md)] border border-line text-muted transition hover:border-error hover:bg-error/10 hover:text-error"
+                          onClick={() => deleteStudySubject(subject.id)}
+                          type="button"
+                        >
+                          <Trash2 aria-hidden className="size-4" />
+                        </button>
+                      </div>
                     </div>
                     <Progress className="mt-4" tone="blue" value={subjectProgress} />
                   </article>
@@ -424,6 +437,14 @@ export function StudyPlanner() {
                         {minutesToHours(session.minutes)}
                       </p>
                     </div>
+                    <button
+                      aria-label="Remover sessao"
+                      className="flex size-8 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-line text-muted transition hover:border-error hover:bg-error/10 hover:text-error"
+                      onClick={() => deleteStudySession(session.id)}
+                      type="button"
+                    >
+                      <Trash2 aria-hidden className="size-4" />
+                    </button>
                   </div>
                 );
               })}

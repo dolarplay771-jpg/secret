@@ -47,7 +47,9 @@ interface SecretState {
   addTransaction: (transaction: FinanceTransactionFormValues) => void;
   deleteTransaction: (id: string) => void;
   addStudySubject: (subject: StudySubjectFormValues) => void;
+  deleteStudySubject: (id: string) => void;
   addStudySession: (session: StudySessionFormValues) => void;
+  deleteStudySession: (id: string) => void;
   toggleStudySession: (id: string) => void;
   addStudyNote: (note: StudyNoteFormValues) => void;
   addGoal: (goal: GoalFormValues) => void;
@@ -140,6 +142,12 @@ export const useSecretStore = create<SecretState>()(
             ...state.studySubjects,
           ],
         })),
+      deleteStudySubject: (id) =>
+        set((state) => ({
+          studySubjects: state.studySubjects.filter((subject) => subject.id !== id),
+          studySessions: state.studySessions.filter((session) => session.subject_id !== id),
+          studyNotes: state.studyNotes.filter((note) => note.subject_id !== id),
+        })),
       addStudySession: (session) =>
         set((state) => ({
           studySessions: [
@@ -152,6 +160,10 @@ export const useSecretStore = create<SecretState>()(
             },
             ...state.studySessions,
           ],
+        })),
+      deleteStudySession: (id) =>
+        set((state) => ({
+          studySessions: state.studySessions.filter((session) => session.id !== id),
         })),
       toggleStudySession: (id) =>
         set((state) => ({
