@@ -56,6 +56,7 @@ export function StudyPlanner() {
   const addStudySession = useSecretStore((state) => state.addStudySession);
   const deleteStudySession = useSecretStore((state) => state.deleteStudySession);
   const addStudyNote = useSecretStore((state) => state.addStudyNote);
+  const deleteStudyNote = useSecretStore((state) => state.deleteStudyNote);
   const toggleStudySession = useSecretStore((state) => state.toggleStudySession);
 
   const subjectForm = useForm<StudySubjectFormValues>({
@@ -497,12 +498,24 @@ export function StudyPlanner() {
                     className="rounded-[var(--radius-md)] border border-line bg-surface-soft/75 p-3"
                     key={note.id}
                   >
-                    <p className="text-sm leading-6 text-foreground">
-                      {note.content}
-                    </p>
-                    <p className="mt-2 text-xs text-muted">
-                      {subject?.name ?? "Materia"}
-                    </p>
+                    <div className="flex items-start gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm leading-6 text-foreground">
+                          {note.content}
+                        </p>
+                        <p className="mt-2 text-xs text-muted">
+                          {subject?.name ?? "Materia"}
+                        </p>
+                      </div>
+                      <button
+                        aria-label="Remover nota"
+                        className="flex size-8 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-line text-muted transition hover:border-error hover:bg-error/10 hover:text-error"
+                        onClick={() => deleteStudyNote(note.id)}
+                        type="button"
+                      >
+                        <Trash2 aria-hidden className="size-4" />
+                      </button>
+                    </div>
                   </div>
                 );
               })}

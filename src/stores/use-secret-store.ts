@@ -52,6 +52,7 @@ interface SecretState {
   deleteStudySession: (id: string) => void;
   toggleStudySession: (id: string) => void;
   addStudyNote: (note: StudyNoteFormValues) => void;
+  deleteStudyNote: (id: string) => void;
   addGoal: (goal: GoalFormValues) => void;
   updateGoal: (id: string, goal: GoalFormValues) => void;
   updateGoalProgress: (id: string, currentValue: number) => void;
@@ -183,6 +184,10 @@ export const useSecretStore = create<SecretState>()(
             },
             ...state.studyNotes,
           ],
+        })),
+      deleteStudyNote: (id) =>
+        set((state) => ({
+          studyNotes: state.studyNotes.filter((note) => note.id !== id),
         })),
       addGoal: (goal) =>
         set((state) => ({
