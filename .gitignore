@@ -42,3 +42,6 @@ next-dev*.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local database / Supabase artifacts
+/supabase
