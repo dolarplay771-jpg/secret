@@ -13,6 +13,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useForm, useWatch } from "react-hook-form";
+import { useMounted } from "@/hooks/use-mounted";
 import { priorityMap } from "@/lib/data";
 import {
   cn,
@@ -48,6 +49,7 @@ const priorityTone = {
 } as const;
 
 export function StudyPlanner() {
+  const mounted = useMounted();
   const subjects = useSecretStore((state) => state.studySubjects);
   const sessions = useSecretStore((state) => state.studySessions);
   const notes = useSecretStore((state) => state.studyNotes);
@@ -141,40 +143,51 @@ export function StudyPlanner() {
         title="Consistencia que aparece no painel."
       />
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          detail={`${subjects.length} temas ativos`}
-          icon={BookMarked}
-          label="Materias"
-          tone="gold"
-          value={String(subjects.length)}
-        />
-        <StatCard
-          detail={`Meta semanal: ${minutesToHours(totalGoal)}`}
-          icon={Clock3}
-          label="Horas estudadas"
-          tone="blue"
-          value={minutesToHours(totalStudied)}
-        />
-        <StatCard
-          detail="Avanco contra a meta semanal"
-          icon={Target}
-          label="Progresso"
-          tone="green"
-          value={`${globalProgress}%`}
-        />
-        <StatCard
-          detail={nextSession ? nextSession.title : "Nada pendente por agora"}
-          icon={CheckCircle2}
-          label="Proxima sessao"
-          tone="gold"
-          value={nextSession ? "Pendente" : "Livre"}
-        />
-      </section>
+      {!mounted ? (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="h-24 animate-pulse rounded-[var(--radius-md)] bg-surface-soft"
+            />
+          ))}
+        </div>
+      ) : (
+        <>
+          <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              detail={`${subjects.length} temas ativos`}
+              icon={BookMarked}
+              label="Materias"
+              tone="gold"
+              value={String(subjects.length)}
+            />
+            <StatCard
+              detail={`Meta semanal: ${minutesToHours(totalGoal)}`}
+              icon={Clock3}
+              label="Horas estudadas"
+              tone="blue"
+              value={minutesToHours(totalStudied)}
+            />
+            <StatCard
+              detail="Avanco contra a meta semanal"
+              icon={Target}
+              label="Progresso"
+              tone="green"
+              value={`${globalProgress}%`}
+            />
+            <StatCard
+              detail={nextSession ? nextSession.title : "Nada pendente por agora"}
+              icon={CheckCircle2}
+              label="Proxima sessao"
+              tone="gold"
+              value={nextSession ? "Pendente" : "Livre"}
+            />
+          </section>
 
-      <section className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="space-y-4">
-        <Card className="p-4" variant="raised">
+          <section className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+            <div className="space-y-4">
+              <Card className="p-4" variant="raised">
             <SectionHeading eyebrow="Nova materia" title="Crie uma trilha" />
 
             <form
@@ -530,6 +543,8 @@ export function StudyPlanner() {
           </Card>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 }
