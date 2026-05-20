@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useMounted } from "@/hooks/use-mounted";
 import {
   achievementDefinitions,
   goalCategoryMap,
@@ -80,6 +81,7 @@ function daysUntil(deadline: string) {
 }
 
 export function GoalsCenter() {
+  const mounted = useMounted();
   const goals = useSecretStore((state) => state.goals);
   const tasks = useSecretStore((state) => state.tasks);
   const transactions = useSecretStore((state) => state.transactions);
@@ -206,11 +208,15 @@ export function GoalsCenter() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        description="Transforme desejos em metas mensuraveis e acompanhe conquistas que mostram sua evolucao real."
-        eyebrow="Metas e conquistas"
-        title="O placar silencioso da sua evolucao."
-      />
+      {!mounted ? (
+        <div className="h-96 animate-pulse rounded-[var(--radius-md)] bg-surface-soft" />
+      ) : (
+        <>
+          <PageHeader
+            description="Transforme desejos em metas mensuraveis e acompanhe conquistas que mostram sua evolucao real."
+            eyebrow="Metas e conquistas"
+            title="O placar silencioso da sua evolucao."
+          />
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
@@ -587,6 +593,8 @@ export function GoalsCenter() {
           </Card>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 }

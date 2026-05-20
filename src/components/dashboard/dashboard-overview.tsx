@@ -13,6 +13,7 @@ import {
   Target,
   WalletCards,
 } from "lucide-react";
+import { useMounted } from "@/hooks/use-mounted";
 import { weekDays } from "@/lib/data";
 import {
   cn,
@@ -59,6 +60,7 @@ const quickActions = [
 ];
 
 export function DashboardOverview() {
+  const mounted = useMounted();
   const tasks = useSecretStore((state) => state.tasks);
   const transactions = useSecretStore((state) => state.transactions);
   const subjects = useSecretStore((state) => state.studySubjects);
@@ -96,7 +98,11 @@ export function DashboardOverview() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
+      {!mounted ? (
+        <div className="h-96 animate-pulse rounded-[var(--radius-md)] bg-surface-soft" />
+      ) : (
+        <>
+          <PageHeader
         description="Uma visao clara da semana, dos estudos e das financas para decidir o proximo passo com calma."
         eyebrow="Secret Studio"
         title="Organize a vida em uma tela."
@@ -317,6 +323,8 @@ export function DashboardOverview() {
           </div>
         </Card>
       </section>
+        </>
+      )}
     </div>
   );
 }
